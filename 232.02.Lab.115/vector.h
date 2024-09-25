@@ -110,8 +110,8 @@ public:
    //
    // Status
    //
-   size_t  size()          const { return 999;}
-   size_t  capacity()      const { return 999;}
+   size_t  size()          const { return numElements;}
+   size_t  capacity()      const { return numCapacity;}
    bool empty()            const { return true;}
   
 private:
@@ -198,7 +198,6 @@ private:
 template <typename T, typename A>
 vector <T, A> :: vector(const A & a)
 {
-   this->alloc = a;
    data = nullptr;
    numElements = 0;
    numCapacity = 0;
@@ -230,9 +229,13 @@ vector <T, A> :: vector(size_t num, const T & t, const A & a)
 template <typename T, typename A>
 vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a) 
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   data = alloc.allocate(l.size());
+   for (int i = 0; i < l.size(); i++)
+   {
+      alloc.construct(data + i, *(l.begin() + i));
+   }
+   numElements = l.size();
+   numCapacity = l.size();
 }
 
 /*****************************************
@@ -263,15 +266,15 @@ vector <T, A> :: vector(size_t num, const A & a)
 template <typename T, typename A>
 vector <T, A> :: vector (const vector & rhs) 
 {
-   data = alloc.allocate(rhs.numCapacity);
+   data = alloc.allocate(rhs.size());
 
-   for (int i = 0; i < rhs.numElements; i++) {
+   for (int i = 0; i < rhs.size(); i++) {
      
       alloc.construct(data + i, rhs[i]);
       
    }
-   numElements = rhs.numElements;
-   numCapacity = rhs.numCapacity;
+   numElements = rhs.size();
+   numCapacity = rhs.size();
 }
    
 /*****************************************
@@ -281,9 +284,12 @@ vector <T, A> :: vector (const vector & rhs)
 template <typename T, typename A>
 vector <T, A> :: vector (vector && rhs) 
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   data = rhs.data;
+   numElements = rhs.numElements;
+   numCapacity = rhs.numCapacity;
+   rhs.data = nullptr;
+   rhs.numCapacity = 0;
+   rhs.numElements = 0;
 }
 
 /*****************************************
@@ -294,6 +300,12 @@ vector <T, A> :: vector (vector && rhs)
 template <typename T, typename A>
 vector <T, A> :: ~vector()
 {
+   for (int i = 0; i < numElements; i++)
+   {
+      alloc.destroy(data + i);
+   }
+
+   alloc.deallocate(data, numCapacity);
 }
 
 /***************************************

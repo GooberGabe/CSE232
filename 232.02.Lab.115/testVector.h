@@ -35,14 +35,14 @@ public:
       test_constructCopy_empty();
       test_constructCopy_standard();
       test_constructCopy_partiallyFilled();
-      /*test_constructMove_empty();
+      test_constructMove_empty();
       test_constructMove_standard();
       test_constructMove_partiallyFilled();
       test_constructInit_empty();
       test_constructInit_standard();
       test_destructor_empty();
       test_destructor_standard();
-      test_destructor_partiallyFilled();*/
+      test_destructor_partiallyFilled();
 
       // Assign
       //test_assign_empty();
