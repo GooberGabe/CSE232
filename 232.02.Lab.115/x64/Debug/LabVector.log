@@ -1,1 +1,119 @@
-﻿  LabVector.vcxproj -> C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\x64\Debug\LabVector.exe
+﻿  testVector.cpp
+C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(64,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testVector.cpp')
+  C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(64,27):
+  the template instantiation context (the oldest one first) is
+  	C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\testVector.h(140,27):
+  	see reference to class template instantiation 'custom::vector<Spy,std::allocator<T>>' being compiled
+          with
+          [
+              T=Spy
+          ]
+  	C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(61,9):
+  	while compiling class template member function 'void custom::vector<Spy,std::allocator<T>>::swap(custom::vector<T,std::allocator<T>> &)'
+          with
+          [
+              T=Spy
+          ]
+  		C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\testVector.h(1190,17):
+  		see the first reference to 'custom::vector<Spy,std::allocator<T>>::swap' in 'TestVector::test_swap_empty'
+          with
+          [
+              T=Spy
+          ]
+  
+C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(65,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testVector.cpp')
+  
+C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(638,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testVector.cpp')
+  C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(638,18):
+  the template instantiation context (the oldest one first) is
+  	C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(624,1):
+  	while compiling class template member function 'custom::vector<Spy,std::allocator<T>> &custom::vector<T,std::allocator<T>>::operator =(const custom::vector<T,std::allocator<T>> &)'
+          with
+          [
+              T=Spy
+          ]
+  		C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\testVector.h(1384,13):
+  		see the first reference to 'custom::vector<Spy,std::allocator<T>>::operator =' in 'TestVector::test_assign_empty'
+          with
+          [
+              T=Spy
+          ]
+  
+C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(596,23): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testVector.cpp')
+  C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(596,23):
+  the template instantiation context (the oldest one first) is
+  	C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(588,1):
+  	while compiling class template member function 'void custom::vector<Spy,std::allocator<T>>::push_back(T &&)'
+          with
+          [
+              T=Spy
+          ]
+  		C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\testVector.h(2377,18):
+  		see the first reference to 'custom::vector<Spy,std::allocator<T>>::push_back' in 'TestVector::test_pushback_moveEmpty'
+          with
+          [
+              T=Spy
+          ]
+  
+C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(567,23): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testVector.cpp')
+  C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(567,23):
+  the template instantiation context (the oldest one first) is
+  	C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(559,1):
+  	while compiling class template member function 'void custom::vector<Spy,std::allocator<T>>::push_back(const T &)'
+          with
+          [
+              T=Spy
+          ]
+  		C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\testVector.h(2263,18):
+  		see the first reference to 'custom::vector<Spy,std::allocator<T>>::push_back' in 'TestVector::test_pushback_empty'
+          with
+          [
+              T=Spy
+          ]
+  
+C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(408,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testVector.cpp')
+  C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(408,18):
+  the template instantiation context (the oldest one first) is
+  	C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(384,1):
+  	while compiling class template member function 'void custom::vector<Spy,std::allocator<T>>::resize(size_t,const T &)'
+          with
+          [
+              T=Spy
+          ]
+  		C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\testVector.h(625,15):
+  		see the first reference to 'custom::vector<Spy,std::allocator<T>>::resize' in 'TestVector::test_resize_emptyFourValue'
+          with
+          [
+              T=Spy
+          ]
+  
+C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(415,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testVector.cpp')
+  
+C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(365,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testVector.cpp')
+  C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(365,18):
+  the template instantiation context (the oldest one first) is
+  	C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(341,1):
+  	while compiling class template member function 'void custom::vector<Spy,std::allocator<T>>::resize(size_t)'
+          with
+          [
+              T=Spy
+          ]
+  		C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\testVector.h(576,15):
+  		see the first reference to 'custom::vector<Spy,std::allocator<T>>::resize' in 'TestVector::test_resize_emptyZero'
+          with
+          [
+              T=Spy
+          ]
+  
+C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\vector.h(372,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testVector.cpp')
+  
+  LabVector.vcxproj -> C:\Users\Scott\Documents\!BYUI\sem06\github\CSE232\232.02.Lab.115\x64\Debug\LabVector.exe

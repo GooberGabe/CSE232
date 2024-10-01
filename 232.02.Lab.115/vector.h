@@ -14,7 +14,7 @@
  *        vector                 : A class that represents a Vector
  *        vector::iterator       : An iterator through Vector
  * Author
- *    M.
+ *    M. Scott O'Connor & Gabe Lytle
  ************************************************************************/
 
 #pragma once
@@ -60,6 +60,19 @@ public:
    //
    void swap(vector& rhs)
    {
+      T* swapData = data;
+      int swapNumElements = numElements;
+      int swapNumCapacity = numCapacity;
+
+      numElements = rhs.numElements;
+      numCapacity = rhs.numCapacity;
+      data = rhs.data;
+
+      rhs.data = swapData;
+      rhs.numElements = swapNumElements;
+      rhs.numCapacity = swapNumCapacity;
+
+      swapData = nullptr;
    }
    vector & operator = (const vector & rhs);
    vector & operator = (vector&& rhs);
@@ -70,11 +83,11 @@ public:
    class iterator;
    iterator begin() 
    { 
-      return iterator(); 
+      return iterator(data); 
    }
    iterator end() 
    { 
-      return iterator(); 
+      return iterator(data + numElements); 
    }
 
    //
@@ -101,9 +114,16 @@ public:
    //
    void clear()
    {
+      for (int i = 0; i < numElements; i++)
+      {
+         alloc.destroy(data + i);
+      }
+      numElements = 0;
    }
    void pop_back()
    {
+      if (numElements > 0)
+         alloc.destroy(data + --numElements);
    }
    void shrink_to_fit();
 
@@ -112,7 +132,7 @@ public:
    //
    size_t  size()          const { return numElements;}
    size_t  capacity()      const { return numCapacity;}
-   bool empty()            const { return true;}
+   bool empty()            const { return !numElements;}
   
 private:
    
@@ -143,27 +163,28 @@ class vector <T, A> ::iterator
 public:
    // constructors, destructors, and assignment operator
    iterator()                           {  }
-   iterator(T* p)                       {  }
+   iterator(T* p)                       { this->p = p; }
    iterator(const iterator& rhs)        {  }
-   iterator(size_t index, vector<T>& v) {  }
+   iterator(size_t index, vector<T>& v) { this->p = &v[index]; }
    iterator& operator = (const iterator& rhs)
    {
       return *this;
    }
 
    // equals, not equals operator
-   bool operator != (const iterator& rhs) const { return true; }
-   bool operator == (const iterator& rhs) const { return true; }
+   bool operator != (const iterator& rhs) const { return !(this->p == rhs.p);}
+   bool operator == (const iterator& rhs) const { return this->p == rhs.p; }
 
    // dereference operator
    T& operator * ()
    {
-      return *(new T);
+      return *p;
    }
 
    // prefix increment
    iterator& operator ++ ()
    {
+      ++p;
       return *this;
    }
 
@@ -318,13 +339,87 @@ vector <T, A> :: ~vector()
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements)
 {
-   numElements = 3;
+   if (numCapacity == 0 && newElements != 0)
+   {
+      data = alloc.allocate(newElements);
+      numCapacity = newElements;
+   }
+   else if (numCapacity < newElements)
+   {
+      T* newData = alloc.allocate(newElements);
+
+      for (int i = 0; i < numElements; i++)
+      {
+         alloc.construct(newData + i, std::move(data[i]));
+         alloc.destroy(data + i);
+      }
+
+      alloc.deallocate(data, numCapacity);
+
+      data = newData;
+      numCapacity = newElements;
+   }
+   
+   if (numElements > newElements)
+   {
+      for (int i = newElements; i < numElements; i++)
+      {
+         alloc.destroy(data + i);
+      }
+   }
+   else if (numElements < newElements)
+   {
+      for (int i = numElements; i < newElements; i++)
+      {
+         alloc.construct(data + i);
+      }
+   }
+
+   numElements = newElements;
+
 }
 
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements, const T & t)
 {
-   numElements = 3;
+   if (numCapacity == 0 && newElements != 0)
+   {
+      data = alloc.allocate(newElements);
+      numCapacity = newElements;
+   }
+   else if (numCapacity < newElements)
+   {
+      T* newData = alloc.allocate(newElements);
+
+      for (int i = 0; i < numElements; i++)
+      {
+         alloc.construct(newData + i, std::move(data[i]));
+         alloc.destroy(data + i);
+      }
+
+      alloc.deallocate(data, numCapacity);
+
+      data = newData;
+      numCapacity = newElements;
+   }
+
+   if (numElements > newElements)
+   {
+      for (int i = newElements; i < numElements; i++)
+      {
+         alloc.destroy(data + i);
+      }
+   }
+   else if (numElements < newElements)
+   {
+      for (int i = numElements; i < newElements; i++)
+      {
+         alloc.construct(data + i, t);
+      }
+   }
+
+   numElements = newElements;
+
 }
 
 /***************************************
@@ -338,7 +433,21 @@ void vector <T, A> :: resize(size_t newElements, const T & t)
 template <typename T, typename A>
 void vector <T, A> :: reserve(size_t newCapacity)
 {
-   numCapacity = 99;
+   if (newCapacity > numCapacity)
+   {
+      T* newData = alloc.allocate(newCapacity);
+
+      for (int i = 0; i < numElements; i++)
+      {
+         alloc.construct(newData + i, std::move(data[i]));
+         alloc.destroy(data + i);
+      }
+
+      alloc.deallocate(data, numCapacity);
+
+      data = newData;
+      numCapacity = newCapacity;
+   }
 }
 
 /***************************************
@@ -350,7 +459,28 @@ void vector <T, A> :: reserve(size_t newCapacity)
 template <typename T, typename A>
 void vector <T, A> :: shrink_to_fit()
 {
-    
+   if (numCapacity > numElements) {
+      if (numElements > 0) {
+
+         T* newData = alloc.allocate(numElements);
+
+         for (int i = 0; i < numElements; i++)
+         {
+            alloc.construct(newData + i, data[i]);
+            alloc.destroy(data + i);
+         }
+         alloc.deallocate(data, numCapacity);
+
+         data = newData;
+      }
+      else if (data)
+      {
+         alloc.deallocate(data, numCapacity);
+         data = nullptr;
+      }
+
+      numCapacity = numElements;
+   }
 }
 
 
@@ -383,7 +513,7 @@ const T & vector <T, A> :: operator [] (size_t index) const
 template <typename T, typename A>
 T & vector <T, A> :: front ()
 {
-   return *(new T);
+   return *(data);
 }
 
 /******************************************
@@ -393,7 +523,7 @@ T & vector <T, A> :: front ()
 template <typename T, typename A>
 const T & vector <T, A> :: front () const
 {
-   return *(new T);
+   return *(data);
 }
 
 /*****************************************
@@ -403,7 +533,7 @@ const T & vector <T, A> :: front () const
 template <typename T, typename A>
 T & vector <T, A> :: back()
 {
-   return *(new T);
+   return *(data + numElements - 1);
 }
 
 /******************************************
@@ -413,7 +543,7 @@ T & vector <T, A> :: back()
 template <typename T, typename A>
 const T & vector <T, A> :: back() const
 {
-   return *(new T);
+   return *(data + numElements - 1);
 }
 
 /***************************************
@@ -427,14 +557,59 @@ const T & vector <T, A> :: back() const
 template <typename T, typename A>
 void vector <T, A> :: push_back (const T & t)
 {
-    
+   if (numCapacity == 0) 
+   {
+      data = alloc.allocate(1);
+      numCapacity = 1;
+   }
+   else if (numCapacity == numElements)
+   {
+      int newCapacity = numCapacity * 2;
+      T* newData = alloc.allocate(newCapacity);
+
+      for (int i = 0; i < numElements; i++)
+      {
+         alloc.construct(newData + i, std::move(data[i]));
+         alloc.destroy(data + i);
+      }
+
+      alloc.deallocate(data, numCapacity);
+
+      data = newData;
+      numCapacity = newCapacity;
+   }
+
+   alloc.construct(data + numElements, t);
+   numElements++;
 }
 
 template <typename T, typename A>
 void vector <T, A> ::push_back(T && t)
 {
-    
+   if (numCapacity == 0)
+   {
+      data = alloc.allocate(1);
+      numCapacity = 1;
+   }
+   else if (numCapacity == numElements)
+   {
+      int newCapacity = numCapacity * 2;
+      T* newData = alloc.allocate(newCapacity);
 
+      for (int i = 0; i < numElements; i++)
+      {
+         alloc.construct(newData + i, std::move(data[i]));
+         alloc.destroy(data + i);
+      }
+
+      alloc.deallocate(data, numCapacity);
+
+      data = newData;
+      numCapacity = newCapacity;
+   }
+
+   alloc.construct(data + numElements, std::move(t));
+   numElements++;
 }
 
 /***************************************
@@ -447,12 +622,53 @@ void vector <T, A> ::push_back(T && t)
 template <typename T, typename A>
 vector <T, A> & vector <T, A> :: operator = (const vector & rhs)
 {
-   
+   if (rhs.size() > numCapacity)
+   {
+      for (int i = 0; i < numElements; i++)
+      {
+         alloc.destroy(data + i);
+      }
+      numElements = 0;
+      data = alloc.allocate(rhs.capacity());
+      numCapacity = rhs.capacity();
+      
+   }
+   else if (numElements > rhs.size())
+   {
+      for (int i = rhs.size(); i <= numElements; i++)
+      {
+         alloc.destroy(data + i);
+         numElements--;
+      }
+   }
+
+   for (int i = 0; i < rhs.size(); i++)
+   {
+      if (numElements <= i) {
+         alloc.construct(data + i, rhs[i]);
+         numElements++;
+      }
+      else
+         data[i] = rhs[i];
+   }
+
    return *this;
 }
 template <typename T, typename A>
 vector <T, A>& vector <T, A> :: operator = (vector&& rhs)
 {
+   for (int i = 0; i < numElements; i++)
+   {
+      alloc.destroy(data + i);
+   }
+   alloc.deallocate(data, numCapacity);
+   numElements = rhs.numElements;
+   numCapacity = rhs.numCapacity;
+   data = rhs.data;
+
+   rhs.data = nullptr;
+   rhs.numElements = 0;
+   rhs.numCapacity = 0;
 
    return *this;
 }
