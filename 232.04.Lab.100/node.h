@@ -45,11 +45,10 @@ public:
       pPrev = nullptr;
       pNext = nullptr;
    }
-   Node(const T & data)
+   Node(const T & data) : data(data)
    {
       pPrev = nullptr;
       pNext = nullptr;
-      this->data = data;
    }
    Node(      T && data)
    {
@@ -109,7 +108,51 @@ inline Node <T> * copy(const Node <T> * pSource)
 template <class T>
 inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 {
-   
+   if (pSource == nullptr)
+   {
+      if (pDestination == nullptr)
+         return;
+      else 
+      {
+         clear(pDestination);
+         return;
+      }
+   }
+   else if (pDestination == nullptr)
+   {
+      pDestination = copy(pSource);
+      return;
+   }
+
+   const Node <T>* pS = pSource;
+   Node <T>* pD = pDestination;
+   Node <T>* pSave = pDestination;
+
+   while (pD != nullptr && pS != nullptr)
+   {
+      pD->data = pS->data;
+      if (pD->pNext == nullptr)
+         pSave = pD;
+      pD = pD->pNext;
+      pS = pS->pNext;
+   }
+   if (pS == nullptr && pD != nullptr)
+   {
+      if (pD->pNext != nullptr)
+         clear(pD->pNext);
+
+      if (pD->pPrev != nullptr)
+         pD->pPrev->pNext = nullptr;
+
+      delete pD;
+   }
+   else if (pS != nullptr && pD == nullptr)
+   {
+      pD = copy(pS);
+      pD->pPrev = pSave;
+      pSave->pNext = pD;
+   }
+
 }
 
 /***********************************************
@@ -120,7 +163,10 @@ inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 template <class T>
 inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
 {
-
+   std::swap(pLHS, pRHS);
+   //Node <T>* pSwap = pLHS;
+   //pLHS = pRHS;
+   //pRHS = pSwap;
 }
 
 /***********************************************
@@ -133,7 +179,32 @@ inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
 template <class T>
 inline Node <T> * remove(const Node <T> * pRemove) 
 {
-   return new Node <T>;
+   Node <T>* pReturn = nullptr;
+   if (pRemove == nullptr)
+      return nullptr;
+   else if (pRemove->pNext != nullptr && pRemove->pPrev != nullptr)
+   {
+      pRemove->pNext->pPrev = pRemove->pPrev;
+      pRemove->pPrev->pNext = pRemove->pNext;
+
+      pReturn = pRemove->pPrev;
+      delete pRemove;
+   }
+   else if (pRemove->pNext != nullptr) {
+      pRemove->pNext->pPrev = nullptr;
+
+      pReturn = pRemove->pNext;
+      delete pRemove;
+   }
+   else if (pRemove->pPrev != nullptr)
+   {
+      pRemove->pPrev->pNext = nullptr;
+
+      pReturn = pRemove->pPrev;
+      delete pRemove;
+   }
+   
+   return pReturn;
 }
 
 /**********************************************
@@ -152,7 +223,34 @@ inline Node <T> * insert(Node <T> * pCurrent,
                   const T & t,
                   bool after = false)
 {
-   return new Node <T>;
+   if (pCurrent == nullptr)
+      return new Node <T>(t);
+
+   Node <T>* pFar;
+   Node <T>* newNode = new Node <T>(t);
+   if (after)
+   {
+      pFar = pCurrent->pNext;
+      newNode->pPrev = pCurrent;
+      newNode->pNext = pFar;
+      pCurrent->pNext = newNode;
+      if (pFar != nullptr)
+      {
+         pFar->pPrev = newNode;
+      }
+   }
+   else
+   {
+      pFar = pCurrent->pPrev;
+      newNode->pNext = pCurrent;
+      newNode->pPrev = pFar;
+      pCurrent->pPrev = newNode;
+      if (pFar != nullptr)
+      {
+         pFar->pNext = newNode;
+      }
+   }
+   return newNode;
 }
 
 /******************************************************
@@ -166,7 +264,16 @@ inline Node <T> * insert(Node <T> * pCurrent,
 template <class T>
 inline size_t size(const Node <T> * pHead)
 {
-   return 99;
+   if (pHead == nullptr)
+      return 0;
+
+   int size = 1;
+
+   for (auto p = pHead->pNext; p != nullptr; p = p->pNext)
+   {
+      size++;
+   }
+   return size;
 }
 
 /***********************************************
@@ -193,7 +300,23 @@ inline std::ostream & operator << (std::ostream & out, const Node <T> * pHead)
 template <class T>
 inline void clear(Node <T> * & pHead)
 {
+   if (pHead == nullptr)
+      return;
 
+   if (pHead->pNext != nullptr)
+   {
+      pHead->pNext->pPrev = nullptr;
+      clear(pHead->pNext);
+   }
+
+   if (pHead->pPrev != nullptr) 
+   {
+      pHead->pPrev->pNext = nullptr;
+      clear(pHead->pPrev);
+   }
+
+   delete pHead;
+   pHead = nullptr;
 }
 
 
