@@ -164,9 +164,6 @@ template <class T>
 inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
 {
    std::swap(pLHS, pRHS);
-   //Node <T>* pSwap = pLHS;
-   //pLHS = pRHS;
-   //pRHS = pSwap;
 }
 
 /***********************************************
@@ -270,9 +267,8 @@ inline size_t size(const Node <T> * pHead)
    int size = 1;
 
    for (auto p = pHead->pNext; p != nullptr; p = p->pNext)
-   {
       size++;
-   }
+
    return size;
 }
 
