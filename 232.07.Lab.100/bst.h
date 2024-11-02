@@ -147,10 +147,9 @@ public:
    {
       pLeft = pRight = nullptr; 
    }
-   BNode(T && t) 
+   BNode(T && t) : data(std::move(t))
    {  
       pLeft = pRight = nullptr;
-      this->data = std::move(t);
    }
 
    //
@@ -511,7 +510,7 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
       }
    }
 
-   auto* newNode = new BNode(t);
+   auto* newNode = new BNode(std::move(t));
 
    if (isLeft)
       pCurrent->pLeft = newNode;
