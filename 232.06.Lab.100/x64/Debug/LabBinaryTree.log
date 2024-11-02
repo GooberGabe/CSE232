@@ -1,0 +1,39 @@
+﻿  testBNode.cpp
+D:\Downloads\232.06.Lab.100\testBNode.h(87,20): warning C4312: 'type cast': conversion from 'unsigned int' to 'BNode<int> *' of greater size
+  (compiling source file 'testBNode.cpp')
+  
+D:\Downloads\232.06.Lab.100\testBNode.h(88,20): warning C4312: 'type cast': conversion from 'unsigned int' to 'BNode<int> *' of greater size
+  (compiling source file 'testBNode.cpp')
+  
+D:\Downloads\232.06.Lab.100\testBNode.h(89,20): warning C4312: 'type cast': conversion from 'unsigned int' to 'BNode<int> *' of greater size
+  (compiling source file 'testBNode.cpp')
+  
+D:\Downloads\232.06.Lab.100\testBNode.h(107,20): warning C4312: 'type cast': conversion from 'unsigned int' to 'BNode<int> *' of greater size
+  (compiling source file 'testBNode.cpp')
+  
+D:\Downloads\232.06.Lab.100\testBNode.h(108,20): warning C4312: 'type cast': conversion from 'unsigned int' to 'BNode<int> *' of greater size
+  (compiling source file 'testBNode.cpp')
+  
+D:\Downloads\232.06.Lab.100\testBNode.h(109,20): warning C4312: 'type cast': conversion from 'unsigned int' to 'BNode<int> *' of greater size
+  (compiling source file 'testBNode.cpp')
+  
+D:\Downloads\232.06.Lab.100\testBNode.h(129,20): warning C4312: 'type cast': conversion from 'unsigned int' to 'BNode<int> *' of greater size
+  (compiling source file 'testBNode.cpp')
+  
+D:\Downloads\232.06.Lab.100\testBNode.h(130,20): warning C4312: 'type cast': conversion from 'unsigned int' to 'BNode<int> *' of greater size
+  (compiling source file 'testBNode.cpp')
+  
+D:\Downloads\232.06.Lab.100\testBNode.h(131,20): warning C4312: 'type cast': conversion from 'unsigned int' to 'BNode<int> *' of greater size
+  (compiling source file 'testBNode.cpp')
+  
+D:\Downloads\232.06.Lab.100\bnode.h(81,13): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testBNode.cpp')
+  D:\Downloads\232.06.Lab.100\bnode.h(81,13):
+  the template instantiation context (the oldest one first) is
+  	D:\Downloads\232.06.Lab.100\testBNode.h(498,18):
+  	see reference to function template instantiation 'size_t size<int>(const BNode<int> *)' being compiled
+  
+D:\Downloads\232.06.Lab.100\bnode.h(82,13): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'testBNode.cpp')
+  
+  LabBinaryTree.vcxproj -> D:\Downloads\232.06.Lab.100\x64\Debug\LabBinaryTree.exe
