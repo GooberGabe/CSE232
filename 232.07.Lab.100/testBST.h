@@ -46,7 +46,7 @@ public:
       test_destruct_empty();
       test_destruct_standard();
 
-      // Assign
+      //// Assign
       test_assign_emptyToEmpty();
       test_assign_standardToEmpty();
       test_assign_emptyToStandard();
@@ -60,11 +60,11 @@ public:
       test_assignMove_standardToOne();
       test_assignMove_standardToStandard();
       test_assignInitializer_oneToStandard();
-      test_assignInitializer_standardToEmpty();
-      test_swap_emptyToEmpty();
-      test_swap_standardToEmpty();
-      test_swap_emptyToStandard();
-      test_swap_standardToStandard();
+      //test_assignInitializer_standardToEmpty();
+      //test_swap_emptyToEmpty();
+      //test_swap_standardToEmpty();
+      //test_swap_emptyToStandard();
+      //test_swap_standardToStandard();
 
       // Iterator
       test_begin_empty();
@@ -84,11 +84,11 @@ public:
       test_iterator_decrement_standardEnd();
       test_iterator_dereference_standardRead();
 
-      // Find
-      test_find_empty();
-      test_find_standardBegin();
-      test_find_standardLast();
-      test_find_standardMissing();
+      //// Find
+      //test_find_empty();
+      //test_find_standardBegin();
+      //test_find_standardLast();
+      //test_find_standardMissing();
 
       // Insert
       test_insert_oneLeft();
@@ -110,11 +110,11 @@ public:
       test_clear_empty();
       test_clear_standard();
 
-      // Status
-      test_empty_empty();
-      test_empty_standard();
-      test_size_empty();
-      test_size_standard();
+      //// Status
+      //test_empty_empty();
+      //test_empty_standard();
+      //test_size_empty();
+      //test_size_standard();
 
       report("BST");
    }

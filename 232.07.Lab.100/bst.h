@@ -369,10 +369,7 @@ BST <T> ::BST(const std::initializer_list<T>& il)
 template <typename T>
 BST <T> :: ~BST()
 {
-   if (root == nullptr)
-      return;
-
-   
+   this->clear();
 }
 
 
@@ -383,6 +380,87 @@ BST <T> :: ~BST()
 template <typename T>
 BST <T> & BST <T> :: operator = (const BST <T> & rhs)
 {
+   if (rhs.root == nullptr) 
+   {
+      this->clear();
+      return *this;
+   }
+
+   if (root == nullptr)
+      root = new BNode(rhs.root->data);
+   else
+      root->data = rhs.root->data;
+
+   numElements = rhs.size();
+
+   std::stack<BNode*> rhsNodeStack;
+   std::stack<BNode*> newNodeStack;
+
+   rhsNodeStack.push(rhs.root);
+   newNodeStack.push(root);
+
+   while (newNodeStack.size() > 0)
+   {
+      auto rhsTop = rhsNodeStack.top();
+      auto newTop = newNodeStack.top();
+      rhsNodeStack.pop();
+      newNodeStack.pop();
+
+      if (rhsTop->pRight != nullptr)
+      {
+         if (newTop->pRight != nullptr)
+         {
+            newTop->pRight->data = rhsTop->pRight->data;
+            rhsNodeStack.push(rhsTop->pRight);
+            newNodeStack.push(newTop->pRight);
+         }
+         else
+         {
+            auto newNode = new BNode(rhsTop->pRight->data);
+            newNode->pParent = newTop;
+            newTop->pRight = newNode;
+            rhsNodeStack.push(rhsTop->pRight);
+            newNodeStack.push(newNode);
+         }
+      }
+      else if (newTop->pRight != nullptr)
+      {
+         iterator it;
+         while (newTop->pRight != nullptr)
+         {
+            it = iterator(newTop->pRight);
+            this->erase(it);
+         }
+      }
+
+      if (rhsTop->pLeft != nullptr)
+      {
+         if (newTop->pLeft != nullptr)
+         {
+            newTop->pLeft->data = rhsTop->pLeft->data;
+            rhsNodeStack.push(rhsTop->pLeft);
+            newNodeStack.push(newTop->pLeft);
+         }
+         else 
+         {
+            auto newNode = new BNode(rhsTop->pLeft->data);
+            newNode->pParent = newTop;
+            newTop->pLeft = newNode;
+            rhsNodeStack.push(rhsTop->pLeft);
+            newNodeStack.push(newNode);
+         }
+      }
+      else if (newTop->pLeft != nullptr)
+      {
+         iterator it;
+         while (newTop->pLeft != nullptr)
+         {
+            it = iterator(newTop->pLeft);
+            this->erase(it);
+         }
+      }
+
+   }
    return *this;
 }
 
@@ -403,6 +481,13 @@ BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
 template <typename T>
 BST <T> & BST <T> :: operator = (BST <T> && rhs)
 {
+   if (root != nullptr)
+      clear();
+
+   root = rhs.root;
+   rhs.root = nullptr;
+   numElements = rhs.size();
+   rhs.numElements = 0;
    return *this;
 }
 
@@ -646,7 +731,38 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
+   if (root == nullptr)
+      return;
 
+   BNode* visitor = root;
+
+   while (root->pLeft != nullptr || root->pRight != nullptr)
+   {
+
+      if (visitor->pLeft != nullptr)
+         visitor = visitor->pLeft;
+      else if (visitor->pRight != nullptr)
+         visitor = visitor->pRight;
+      else
+      {
+         if (visitor->pParent->pLeft == visitor)
+         {
+            visitor = visitor->pParent;
+            delete visitor->pLeft;
+            visitor->pLeft = nullptr;
+         }
+         else
+         {
+            visitor = visitor->pParent;
+            delete visitor->pRight;
+            visitor->pRight = nullptr;
+         }
+      }
+   }
+
+   delete root;
+   root = nullptr;
+   numElements = 0;
 }
 
 /*****************************************************
