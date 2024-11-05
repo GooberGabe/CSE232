@@ -147,8 +147,8 @@ public:
    {
       pLeft = pRight = nullptr; 
    }
-   BNode(T && t) : data(std::move(t))
-   {  
+   BNode(T&& t) : data(std::move(t))
+   {
       pLeft = pRight = nullptr;
    }
 
@@ -341,7 +341,7 @@ BST <T> :: BST(BST <T> && rhs)
    this->root = rhs.root;
    rhs.root = nullptr;
    rhs.numElements = 0;
-
+   
 }
 
 /*********************************************
@@ -351,8 +351,16 @@ BST <T> :: BST(BST <T> && rhs)
 template <typename T>
 BST <T> ::BST(const std::initializer_list<T>& il)
 {
-   numElements = 99;
-   root = new BNode;
+   numElements = 0;
+   if (il.size() == 0)
+   {
+      this->root = nullptr;
+      return;
+   }
+
+   for (auto it = il.begin(); it != il.end(); it++) 
+      insert(*it);
+   
 }
 
 /*********************************************
@@ -361,7 +369,10 @@ BST <T> ::BST(const std::initializer_list<T>& il)
 template <typename T>
 BST <T> :: ~BST()
 {
+   if (root == nullptr)
+      return;
 
+   
 }
 
 
@@ -412,6 +423,15 @@ void BST <T> :: swap (BST <T>& rhs)
 template <typename T>
 std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, bool keepUnique)
 {
+   if (root == nullptr)
+   {
+      root = new BNode(t);
+      auto it = BST<T>::iterator(root);
+      std::pair<iterator, bool> pairReturn(it, true);
+      numElements++;
+      return pairReturn;
+   }
+
    auto* pCurrent = root;
 
    bool exit = false;
@@ -470,6 +490,15 @@ std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, boo
 template <typename T>
 std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepUnique)
 {
+   if (root == nullptr)
+   {
+      root = new BNode(t);
+      auto it = BST<T>::iterator(root);
+      std::pair<iterator, bool> pairReturn(it, true);
+      numElements++;
+      return pairReturn;
+   }
+      
    auto* pCurrent = root;
 
    bool exit = false;
@@ -531,7 +560,83 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
 template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {  
-   return end();
+   if (it == end()) {
+      return it;
+   }
+
+   iterator next = it;
+   ++next;
+
+   BNode* node = it.pNode;
+   BNode* parent = node->pParent;
+
+   if (!node->pLeft && !node->pRight) {
+      if (parent) {
+         if (parent->pLeft == node) parent->pLeft = nullptr;
+         else parent->pRight = nullptr;
+      }
+      else {
+         root = nullptr;
+      }
+      delete node;
+   }
+   else if (!node->pLeft) {
+      if (parent) {
+         if (parent->pLeft == node) parent->pLeft = node->pRight;
+         else parent->pRight = node->pRight;
+      }
+      else {
+         root = node->pRight;
+      }
+      node->pRight->pParent = parent;
+      delete node;
+   }
+   else if (!node->pRight) {
+      if (parent) {
+         if (parent->pLeft == node) parent->pLeft = node->pLeft;
+         else parent->pRight = node->pLeft;
+      }
+      else {
+         root = node->pLeft;
+      }
+      node->pLeft->pParent = parent;
+      delete node;
+   }
+   else {
+      BNode* successor = node->pRight;
+      while (successor->pLeft) {
+         successor = successor->pLeft;
+      }
+
+      if (successor->pParent != node) {
+         successor->pParent->pLeft = successor->pRight;
+         if (successor->pRight)
+            successor->pRight->pParent = successor->pParent;
+
+         successor->pRight = node->pRight;
+         node->pRight->pParent = successor;
+      }
+
+      successor->pLeft = node->pLeft;
+      node->pLeft->pParent = successor;
+
+      successor->pParent = node->pParent;
+      if (parent) {
+         if (parent->pLeft == node)
+            parent->pLeft = successor;
+         else
+            parent->pRight = successor;
+      }
+      else {
+         root = successor;
+      }
+
+      delete node;
+   }
+
+   numElements--;
+   return next;
+
 }
 
 /*****************************************************
@@ -561,6 +666,7 @@ typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
    }
 
    return iterator(tempNode);
+
 }
 
 
