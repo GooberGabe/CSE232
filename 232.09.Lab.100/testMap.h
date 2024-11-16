@@ -78,7 +78,7 @@ public:
       test_access_standardRootWrite();
       test_access_standardLeftWrite();
       test_access_standardRightWrite();
-      //test_access_emptyWrite();
+      test_access_emptyWrite();
       //test_access_standardFrontInsert();
       //test_access_standardMiddleInsert();
       //test_at_standardRootRead();

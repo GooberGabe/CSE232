@@ -222,7 +222,7 @@ public:
 
    pair <K, V>& operator * ()
    {
-      return *it;
+      return it.pNode->data;
    }
 
    //

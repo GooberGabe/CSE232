@@ -223,11 +223,6 @@ namespace custom
          return pNode->data;
       }
 
-      T& operator * ()
-      {
-         return pNode->data;
-      }
-
       // increment and decrement
       iterator& operator ++ ();
       iterator   operator ++ (int postfix)
