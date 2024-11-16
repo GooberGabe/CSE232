@@ -78,7 +78,7 @@ public:
       test_access_standardRootWrite();
       test_access_standardLeftWrite();
       test_access_standardRightWrite();
-      //test_access_emptyWrite();
+      test_access_emptyWrite();
       //test_access_standardFrontInsert();
       //test_access_standardMiddleInsert();
       //test_at_standardRootRead();
@@ -96,11 +96,11 @@ public:
       //test_find_standardMissing();
 
       // Insert
-      //test_insertCopy_empty();
-      //test_insertCopy_standardFront();
-      //test_insertCopy_standardMiddle();
-      //test_insertMove_empty();
-      //test_insertMove_standard();
+      test_insertCopy_empty();
+      test_insertCopy_standardFront();
+      test_insertCopy_standardMiddle();
+      test_insertMove_empty();
+      test_insertMove_standard();
 
       //// Remove
       //test_clear_empty();
@@ -115,10 +115,10 @@ public:
       //test_erase_standardRange();
 
       //// Status
-      //test_empty_empty();
-      //test_empty_standard();
-      //test_size_empty();
-      //test_size_standard();
+      test_empty_empty();
+      test_empty_standard();
+      test_size_empty();
+      test_size_standard();
 
       report("Map");
    }

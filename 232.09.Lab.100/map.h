@@ -130,19 +130,31 @@ public:
    //
    custom::pair<typename map::iterator, bool> insert(Pairs && rhs)
    {
-      bst.insert(rhs);
+      auto i = bst.insert(rhs);
+      return make_pair(iterator(i.first), i.second);
    }
    custom::pair<typename map::iterator, bool> insert(const Pairs & rhs)
    {
-      return make_pair(iterator(), false);
+      auto i = bst.insert(rhs);
+      return make_pair(iterator(i.first), i.second);
    }
 
    template <class Iterator>
    void insert(Iterator first, Iterator last)
    {
+      Iterator it = first;
+      while (it != last) {
+         bst.insert(*it, true);
+         it++;
+      }
    }
    void insert(const std::initializer_list <Pairs>& il)
    {
+      auto it = il.begin();
+      while (it != il.end()) {
+         bst.insert(*it, true);
+         it++;
+      }
    }
 
    //
@@ -150,6 +162,7 @@ public:
    //
    void clear() noexcept
    {
+      bst.clear();
    }
    size_t erase(const K& k);
    iterator erase(iterator it);
@@ -222,7 +235,7 @@ public:
 
    pair <K, V>& operator * ()
    {
-      return *it;
+      return it.pNode->data;
    }
 
    //
@@ -317,7 +330,12 @@ void swap(map <K, V>& lhs, map <K, V>& rhs)
 template <typename K, typename V>
 size_t map<K, V>::erase(const K& k)
 {
-   return size_t(99);
+   auto item = bst.find(k);
+   if (item == nullptr)
+      return 0;
+
+   bst.erase(item);
+   return 1;
 }
 
 /*****************************************************
@@ -327,7 +345,11 @@ size_t map<K, V>::erase(const K& k)
 template <typename K, typename V>
 typename map<K, V>::iterator map<K, V>::erase(map<K, V>::iterator first, map<K, V>::iterator last)
 {
-   return iterator();
+   iterator it = first;
+   while (it != last) {
+      it = erase(it);
+   }
+   return it;
 }
 
 /*****************************************************
@@ -337,7 +359,7 @@ typename map<K, V>::iterator map<K, V>::erase(map<K, V>::iterator first, map<K, 
 template <typename K, typename V>
 typename map<K, V>::iterator map<K, V>::erase(map<K, V>::iterator it)
 {
-   return iterator();
+   return bst.erase(it.it);
 }
 
 }; //  namespace custom
