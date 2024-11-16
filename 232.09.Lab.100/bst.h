@@ -89,7 +89,7 @@ namespace custom
 
       class iterator;
       iterator   begin() const noexcept;
-      iterator   end()   const noexcept { return nullptr; }
+      iterator   end()   const noexcept { return iterator (nullptr); }
 
       //
       // Access
@@ -139,17 +139,14 @@ namespace custom
       // 
       // Construct
       //
-      BNode()
+      BNode() : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data()
       {
-         pLeft = pRight = nullptr;
       }
-      BNode(const T& t) : data(t)
+      BNode(const T& t) : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(t)
       {
-         pLeft = pRight = nullptr;
       }
-      BNode(T&& t) : data(std::move(t))
+      BNode(T&& t) : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(std::move(t))
       {
-         pLeft = pRight = nullptr;
       }
 
       //
@@ -196,16 +193,17 @@ namespace custom
       friend class set;
    public:
       // constructors and assignment
-      iterator(BNode* p = nullptr) : pNode(p) {}
+      iterator(BNode* p = nullptr) {
+         pNode = p;
+      }
 
-      iterator(const iterator& rhs) : pNode(rhs.pNode) {}
+      iterator(const iterator& rhs) {
+         pNode = rhs.pNode;
+      }
 
       iterator& operator = (const iterator& rhs)
       {
-         if (this != &rhs)
-         {
-            pNode = rhs.pNode;
-         }
+         pNode = rhs.pNode;
          return *this;
       }
 
@@ -222,10 +220,11 @@ namespace custom
       // de-reference. Cannot change because it will invalidate the BST
       const T& operator * () const
       {
-         if (pNode == nullptr)
-         {
-            throw "Accessing null iterator";
-         }
+         return pNode->data;
+      }
+
+      T& operator * ()
+      {
          return pNode->data;
       }
 
@@ -233,13 +232,17 @@ namespace custom
       iterator& operator ++ ();
       iterator   operator ++ (int postfix)
       {
-         return *this;
+         iterator itReturn = *this;
+         ++(*this);
+         return itReturn;
       }
       iterator& operator -- ();
 
       iterator   operator -- (int postfix)
       {
-         return *this;
+         iterator itReturn = *this;
+         --(*this);
+         return itReturn;
       }
 
       // must give friend status to remove so it can call getNode() from it
@@ -791,13 +794,11 @@ namespace custom
    typename BST <T> ::iterator custom::BST <T> ::begin() const noexcept
    {
       if (root == nullptr)
-         return iterator(nullptr);
+         return end();
 
       BNode* tempNode = root;
       while (tempNode->pLeft != nullptr)
-      {
          tempNode = tempNode->pLeft;
-      }
 
       return iterator(tempNode);
 
@@ -811,41 +812,9 @@ namespace custom
    template <typename T>
    typename BST <T> ::iterator BST<T> ::find(const T& t)
    {
-      if (root == nullptr)
-         return nullptr;
-      
-
-      if (root->data == t)
-         return BST<T>::iterator(root);
-
-      auto* pCurrent = root;
-
-      while (pCurrent != nullptr)
-      {
-
-         if (t < pCurrent->data)
-         {
-            if (pCurrent->pLeft == nullptr) {
-               return BST<T>::iterator(nullptr);
-            }
-            pCurrent = pCurrent->pLeft;
-            if (t == pCurrent->data) {
-               auto it = BST<T>::iterator(pCurrent);
-               return it;
-            }
-         }
-         else
-         {
-            if (pCurrent->pRight == nullptr) {
-               return BST<T>::iterator(nullptr);
-            }
-            pCurrent = pCurrent->pRight;
-            if (t == pCurrent->data) {
-               auto it = BST<T>::iterator(pCurrent);
-               return it;
-            }
-         }
-      }
+      for (BNode* p = root; p != nullptr; p = (t < p->data ? p->pLeft : p->pRight))
+         if (p->data == t)
+            return iterator(p);
 
       return end();
    }

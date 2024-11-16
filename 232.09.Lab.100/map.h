@@ -220,6 +220,11 @@ public:
       return *it;
    }
 
+   pair <K, V>& operator * ()
+   {
+      return *it;
+   }
+
    //
    // Increment
    //
@@ -256,7 +261,13 @@ private:
 template <typename K, typename V>
 V& map <K, V> :: operator [] (const K& key)
 {
-   return *(new V);
+   iterator it = bst.find(key);
+   if (it == bst.end())
+   {
+      bst.insert(pair<K, V>(key, V()), false);
+      it = bst.find(key);
+   }
+   return (*it).second;
 }
 
 /*****************************************************

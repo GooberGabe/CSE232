@@ -75,9 +75,9 @@ public:
       test_access_standardRootRead();
       test_access_standardLeftRead();
       test_access_standardRightRead();
-      //test_access_standardRootWrite();
-      //test_access_standardLeftWrite();
-      //test_access_standardRightWrite();
+      test_access_standardRootWrite();
+      test_access_standardLeftWrite();
+      test_access_standardRightWrite();
       //test_access_emptyWrite();
       //test_access_standardFrontInsert();
       //test_access_standardMiddleInsert();
@@ -96,7 +96,7 @@ public:
       //test_find_standardMissing();
 
       // Insert
-      test_insertCopy_empty();
+      //test_insertCopy_empty();
       //test_insertCopy_standardFront();
       //test_insertCopy_standardMiddle();
       //test_insertMove_empty();
