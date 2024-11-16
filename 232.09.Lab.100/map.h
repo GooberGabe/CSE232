@@ -56,16 +56,26 @@ public:
    }
    map(const map &  rhs) 
    { 
+      bst = rhs.bst;
    }
    map(map && rhs) 
-   { 
+   {
+      bst = std::move(rhs.bst);
    }
    template <class Iterator>
    map(Iterator first, Iterator last) 
    {
+      bst = BST<Pairs>();
+      Iterator scanner = first;
+      while (scanner != last)
+      {
+         bst.insert(*scanner);
+         scanner++;
+      }
    }
    map(const std::initializer_list <Pairs>& il) 
    {
+      bst = BST<Pairs>(il);
    }
   ~map()         
    {
@@ -76,14 +86,17 @@ public:
    //
    map & operator = (const map & rhs) 
    {
+      bst = rhs.bst;
       return *this;
    }
    map & operator = (map && rhs)
    {
+      bst = std::move(rhs.bst);
       return *this;
    }
    map & operator = (const std::initializer_list <Pairs> & il)
    {
+      bst = BST<Pairs>(il);
       return *this;
    }
    
@@ -93,11 +106,11 @@ public:
    class iterator;
    iterator begin() 
    { 
-      return iterator();
+      return bst.begin();
    }
    iterator end() 
    { 
-      return iterator();    
+      return bst.end();
    }
 
    // 
@@ -109,7 +122,7 @@ public:
          V & at (const K& k);
    iterator    find(const K & k)
    {
-      return iterator ();
+      return bst.find(pair<K, V>(k, NULL));
    }
 
    //
@@ -117,7 +130,7 @@ public:
    //
    custom::pair<typename map::iterator, bool> insert(Pairs && rhs)
    {
-      return make_pair(iterator(), false);
+      bst.insert(rhs);
    }
    custom::pair<typename map::iterator, bool> insert(const Pairs & rhs)
    {
@@ -173,12 +186,15 @@ public:
    //
    iterator()
    {
+      it = custom::BST<Pairs>::iterator();
    }
    iterator(const typename BST < pair <K, V> > :: iterator & rhs)
    { 
+      it = custom::BST<Pairs>::iterator(rhs);
    }
    iterator(const iterator & rhs) 
-   { 
+   {
+      it = rhs.it;
    }
 
    //
@@ -186,6 +202,7 @@ public:
    //
    iterator & operator = (const iterator & rhs)
    {
+      it = rhs.it;
       return *this;
    }
 
@@ -200,7 +217,7 @@ public:
    //
    const pair <K, V> & operator * () const
    {
-      return *(new pair<K,V>);
+      return *it;
    }
 
    //
@@ -208,6 +225,7 @@ public:
    //
    iterator & operator ++ ()
    {
+      ++it;
       return *this;
    }
    iterator operator ++ (int postfix)
@@ -216,6 +234,7 @@ public:
    }
    iterator & operator -- ()
    {
+      --it;
       return *this;
    }
    iterator  operator -- (int postfix)
@@ -247,7 +266,7 @@ V& map <K, V> :: operator [] (const K& key)
 template <typename K, typename V>
 const V& map <K, V> :: operator [] (const K& key) const
 {
-   return *(new V);
+   return (*find(key)).second;
 }
 
 /*****************************************************
@@ -277,6 +296,7 @@ const V& map <K, V> ::at(const K& key) const
 template <typename K, typename V>
 void swap(map <K, V>& lhs, map <K, V>& rhs)
 {
+   swap(lhs.bst, rhs.bst);
 }
 
 /*****************************************************

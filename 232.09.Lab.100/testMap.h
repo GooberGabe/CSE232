@@ -30,51 +30,51 @@ public:
 
       // Construct
       test_construct_default();
-      //test_constructCopy_empty();
-      //test_constructCopy_one();
-      //test_constructCopy_standard();
-      //test_constructMove_empty();
-      //test_constructMove_one();
-      //test_constructMove_standard();
-      //test_constructInit_empty();
-      //test_constructInit_one();
-      //test_constructInit_standard();
-      //test_constructRange_empty();
-      //test_constructRange_one();
-      //test_constructRange_standard();
-      //test_destructor_empty();
-      //test_destructor_standard();
+      test_constructCopy_empty();
+      test_constructCopy_one();
+      test_constructCopy_standard();
+      test_constructMove_empty();
+      test_constructMove_one();
+      test_constructMove_standard();
+      test_constructInit_empty();
+      test_constructInit_one();
+      test_constructInit_standard();
+      test_constructRange_empty();
+      test_constructRange_one();
+      test_constructRange_standard();
+      test_destructor_empty();
+      test_destructor_standard();
 
-      //// Assign
-      //test_assign_emptyToEmpty();
-      //test_assign_standardToEmpty();
-      //test_assign_emptyToStandard();
-      //test_assign_standardToNotempty();
-      //test_assignMove_emptyToEmpty();
-      //test_assignMove_standardToEmpty();
-      //test_assignMove_emptyToStandard();
-      //test_assignMove_standardToNotempty();
-      //test_assignInit_emptyToEmpty();
-      //test_assignInit_standardToEmpty();
-      //test_assignInit_emptyToStandard();
-      //test_assignInit_standardToNotempty();
-      //test_swap_emptyToEmpty();
-      //test_swap_standardToEmpty();
-      //test_swap_emptyToStandard();
-      //test_swap_standardToStandard();
+      // Assign
+      test_assign_emptyToEmpty();
+      test_assign_standardToEmpty();
+      test_assign_emptyToStandard();
+      test_assign_standardToNotempty();
+      test_assignMove_emptyToEmpty();
+      test_assignMove_standardToEmpty();
+      test_assignMove_emptyToStandard();
+      test_assignMove_standardToNotempty();
+      test_assignInit_emptyToEmpty();
+      test_assignInit_standardToEmpty();
+      test_assignInit_emptyToStandard();
+      test_assignInit_standardToNotempty();
+      test_swap_emptyToEmpty();
+      test_swap_standardToEmpty();
+      test_swap_emptyToStandard();
+      test_swap_standardToStandard();
 
-      //// Iterator
-      //test_begin_empty();
-      //test_begin_standard();
-      //test_end_standard();
-      //test_iterator_increment_standardToChild();
-      //test_iterator_increment_standardToParent();
-      //test_iterator_dereference_standardRead();
+      // Iterator
+      test_begin_empty();
+      test_begin_standard();
+      test_end_standard();
+      test_iterator_increment_standardToChild();
+      test_iterator_increment_standardToParent();
+      test_iterator_dereference_standardRead();
 
-      //// Access
-      //test_access_standardRootRead();
-      //test_access_standardLeftRead();
-      //test_access_standardRightRead();
+      // Access
+      test_access_standardRootRead();
+      test_access_standardLeftRead();
+      test_access_standardRightRead();
       //test_access_standardRootWrite();
       //test_access_standardLeftWrite();
       //test_access_standardRightWrite();
@@ -95,8 +95,8 @@ public:
       //test_find_standardRight();
       //test_find_standardMissing();
 
-      //// Insert
-      //test_insertCopy_empty();
+      // Insert
+      test_insertCopy_empty();
       //test_insertCopy_standardFront();
       //test_insertCopy_standardMiddle();
       //test_insertMove_empty();

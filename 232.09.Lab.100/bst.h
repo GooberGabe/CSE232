@@ -239,7 +239,7 @@ namespace custom
 
       iterator   operator -- (int postfix)
       {
-         return *this;;
+         return *this;
       }
 
       // must give friend status to remove so it can call getNode() from it
@@ -351,12 +351,10 @@ namespace custom
    template <typename T>
    BST <T> ::BST(const std::initializer_list<T>& il)
    {
+      root = nullptr;
       numElements = 0;
       if (il.size() == 0)
-      {
-         this->root = nullptr;
          return;
-      }
 
       for (auto it = il.begin(); it != il.end(); it++)
          insert(*it);
