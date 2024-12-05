@@ -21,6 +21,7 @@
 
 // Debug stuff
 #include <cassert>
+#include <algorithm>
 
 class TestDeque;    // forward declaration for TestDeque unit test class
 
@@ -227,7 +228,7 @@ private:
 template <class T>
 deque <T> :: deque(int newCapacity)
 {
-
+   resize(newCapacity);
 }
 
 /****************************************************
@@ -236,10 +237,12 @@ deque <T> :: deque(int newCapacity)
 template <class T>
 deque <T> :: deque(const deque <T> & rhs)
 {
+   data = new T[rhs.numCapacity];
+   numElements = rhs.numElements;
+   numCapacity = rhs.numCapacity;
 
-   for (iterator it = rhs.begin(); it != rhs.end(); it++)
-   {
-      push_back(rhs[it]);
+   for (int i = 0; i < numElements; ++i) {
+      data[i] = rhs.data[i];
    }
 }
 
@@ -250,6 +253,18 @@ deque <T> :: deque(const deque <T> & rhs)
 template <class T>
 deque <T> & deque <T> :: operator = (const deque <T> & rhs)
 {
+   if (rhs.numCapacity > this->numCapacity) {
+      delete[] this->data;
+      this->data = new T[rhs.numCapacity];
+      this->numCapacity = rhs.numCapacity;
+   }
+
+   this->numElements = rhs.numElements;
+
+   for (int i = 0; i < this->numElements; ++i) {
+      this->data[i] = rhs.data[i];
+   }
+
    return *this;
 }
 
@@ -321,7 +336,25 @@ void deque <T> :: pop_front()
 template <class T>
 void deque <T> :: push_back(const T & t) 
 {
+   if (numCapacity == 0)
+   {
+      resize(1);
+   }
+   else if (numElements == numCapacity) {
+      resize(2 * numCapacity);
+   }
 
+   int ia;
+
+   if (numElements == 0)
+      data[0] = t;
+   else
+   {
+      ia = iaFromID(numElements);
+      data[ia] = t;
+   }
+
+   numElements++;
 }
 
 /******************************************************
@@ -330,6 +363,7 @@ void deque <T> :: push_back(const T & t)
 template <class T>
 void deque <T> :: push_front(const T & t) 
 {
+   //data.push_front(t);
 }
 
 /****************************************************
@@ -339,6 +373,26 @@ void deque <T> :: push_front(const T & t)
 template <class T>
 void deque <T> :: resize(int newCapacity) 
 {
+
+   T* newData = new T[newCapacity];
+
+   if (numElements > 0) {
+      size_t numCopy;
+      if (numElements < newCapacity)
+         numCopy = numElements;
+      else
+         numCopy = newCapacity;
+
+      for (size_t i = 0; i < numCopy; ++i) {
+         newData[i] = data[iaFromID(i)];
+      }
+
+      delete[] data;
+   }
+
+   data = newData;
+   numCapacity = newCapacity;
+
 }
 
 } // namespace custom
