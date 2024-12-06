@@ -363,7 +363,31 @@ void deque <T> :: push_back(const T & t)
 template <class T>
 void deque <T> :: push_front(const T & t) 
 {
-   //data.push_front(t);
+   /*
+   if (numCapacity == 0)
+   {
+      resize(1);
+   }
+   else if (numElements == numCapacity) {
+      resize(2 * numCapacity);
+   }
+
+
+   if (numElements == 0)
+      data[0] = t;
+   else
+   {
+      T* newData = new T[numCapacity];
+      newData[0] = t;
+      for (size_t i = 0; i < numElements; i++)
+      {
+         newData[i + 1] = data[i];
+      }
+      delete data;
+      data = newData;
+   }
+
+   numElements++;*/
 }
 
 /****************************************************
